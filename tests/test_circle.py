@@ -1,4 +1,4 @@
-пшеfrom math import pi
+from math import pi
 
 import pytest
 
