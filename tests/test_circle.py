@@ -1,44 +1,27 @@
+пшеfrom math import pi
+
 import pytest
-from math import *
 
-from src.Circle import Circle
-
-
-def test_creation_circle():
-    assert Circle(5)
+from shapes import Circle
 
 
-def test_no_creation_circle():
-    with pytest.raises(ValueError):
-        Circle(-5)
+@pytest.mark.parametrize(
+    "radius, expected_area",
+    [(1, pi), (2, 4 * pi), (0.5, pi / 4)],
+)
+def test_circle_area(radius, expected_area):
+    assert Circle(radius).area == pytest.approx(expected_area)
 
 
-def test_no_creation_circle_2():
-    with pytest.raises(ValueError):
-        Circle(0)
+@pytest.mark.parametrize(
+    "radius, expected_perimeter",
+    [(1, 2 * pi), (5, 10 * pi)],
+)
+def test_circle_perimeter(radius, expected_perimeter):
+    assert Circle(radius).perimeter == pytest.approx(expected_perimeter)
 
 
-def test_summ_area(rectangle):
-    circle = Circle(10)
-    assert circle.add_area(rectangle) == circle.get_area + rectangle.get_area
-
-
-def test_summ_area_2(triangle):
-    circle = Circle(10)
-    assert circle.add_area(triangle) == circle.get_area + triangle.get_area
-
-
-def test_summ_area_3(square):
-    circle = Circle(10)
-    assert circle.add_area(square) == circle.get_area + square.get_area
-
-
-def test_summ_area_4(circle):
-    circle = Circle(10)
-    assert circle.add_area(circle) == circle.get_area + circle.get_area
-
-
-def test_summ_area_5():
-    with pytest.raises(ValueError):
-        circle = Circle(10)
-        assert circle.add_area("str") == circle.get_area + "str".get_area
+@pytest.mark.parametrize("radius", [0, -1, -0.1])
+def test_circle_invalid_radius(radius):
+    with pytest.raises(ValueError, match="Радиус"):
+        Circle(radius)

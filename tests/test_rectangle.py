@@ -1,48 +1,28 @@
 import pytest
-from math import *
 
-from src.Rectangle import Rectangle
-
-
-def test_creation_rectangle():
-    assert Rectangle(5, 5)
+from shapes import Rectangle
 
 
-def test_creation_rectangle_2():
-    assert Rectangle(5, 10)
+@pytest.mark.parametrize(
+    "width, height, expected_area",
+    [(2, 5, 10), (5, 5, 25), (1.5, 2, 3.0)],
+)
+def test_rectangle_area(width, height, expected_area):
+    assert Rectangle(width, height).area == pytest.approx(expected_area)
 
 
-def test_no_creation_rectangle():
-    with pytest.raises(ValueError):
-        assert Rectangle(5, -5)
+@pytest.mark.parametrize(
+    "width, height, expected_perimeter",
+    [(2, 5, 14), (5, 5, 20)],
+)
+def test_rectangle_perimeter(width, height, expected_perimeter):
+    assert Rectangle(width, height).perimeter == pytest.approx(expected_perimeter)
 
 
-def test_no_creation_rectangle_2():
-    with pytest.raises(ValueError):
-        assert Rectangle(5, 0)
-
-
-def test_summ_area_16(rectangle):
-    rectangle = Rectangle(2, 5)
-    assert rectangle.add_area(rectangle) == rectangle.get_area + rectangle.get_area
-
-
-def test_summ_area_17(triangle):
-    rectangle = Rectangle(2, 5)
-    assert rectangle.add_area(triangle) == rectangle.get_area + triangle.get_area
-
-
-def test_summ_area_18(square):
-    rectangle = Rectangle(2, 5)
-    assert rectangle.add_area(square) == rectangle.get_area + square.get_area
-
-
-def test_summ_area_19(circle):
-    rectangle = Rectangle(2, 5)
-    assert rectangle.add_area(circle) == rectangle.get_area + circle.get_area
-
-
-def test_summ_area_20():
-    with pytest.raises(ValueError):
-        rectangle = Rectangle(2, 5)
-        assert rectangle.add_area("str") == rectangle.get_area + "str".get_area
+@pytest.mark.parametrize(
+    "width, height",
+    [(0, 5), (5, 0), (-1, 5), (5, -1), (0, 0)],
+)
+def test_rectangle_invalid_sides(width, height):
+    with pytest.raises(ValueError, match="Стороны прямоугольника"):
+        Rectangle(width, height)
